@@ -1,0 +1,8 @@
+export { Header } from './components/Header'
+export { Hero } from './components/Hero'
+export { Services } from './components/Services'
+export { Gallery } from './components/Gallery'
+export { Profile } from './components/Profile'
+export { InquiryForm } from './components/InquiryForm'
+export { Footer } from './components/Footer'
+export { useLenis } from './hooks/useLenis'
