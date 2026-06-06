@@ -12,6 +12,12 @@ dist
 dist-ssr
 *.local
 
+# Project-specific exclusions
+CLAUDE.md
+SPEC.md
+skills-lock.json
+.claude
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
