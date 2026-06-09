@@ -61,8 +61,8 @@ export function Footer() {
         </div>
 
         <div className="mt-16 flex flex-col items-start justify-between gap-3 border-t border-[var(--color-border)] pt-8 text-xs text-[var(--color-text-dim)] sm:flex-row sm:items-center">
-          <p>© {new Date().getFullYear()} Adam Kastner Events. Všechna práva vyhrazena.</p>
-          <p className="uppercase tracking-[0.18em]">Navrženo v Praze · Realizujeme kdekoliv</p>
+          <p>© {new Date().getFullYear()} Adys Social Events. Všechna práva vyhrazena.</p>
+          <p className="uppercase tracking-[0.18em]">Navrženo v Praze · Autor webu Amin Ashhab</p>
         </div>
       </div>
     </footer>

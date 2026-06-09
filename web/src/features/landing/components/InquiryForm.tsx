@@ -3,7 +3,7 @@ import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { SectionHeading } from './SectionHeading'
 
-type EventType = 'Corporate' | 'Wedding' | 'Private Party' | 'Virtual' | 'Other'
+type EventType = 'Rozlučky se svobodou' | 'Svatby a oslavy' | 'Soukromé večírky' | 'Teambuildingy' | 'Jiné'
 type Budget = 'Do 50 000 Kč' | '50 000 – 100 000 Kč' | 'Nad 100 000 Kč' | 'Zatím nevím'
 type City = 'Praha' | 'Středočeský kraj'
 type Catering = 'Ano' | 'Ne'
@@ -137,8 +137,8 @@ export function InquiryForm() {
           city: form.city,
           event_type: form.eventType,
           guest_count: form.guestCount,
-          event_date_from: form.eventDateFrom,
-          event_date_to: form.eventDateTo,
+          event_date_from: form.eventDateFrom.split('-').reverse().join('.'),
+          event_date_to: form.eventDateTo.split('-').reverse().join('.'),
           catering: form.catering,
           has_venue: form.hasVenue,
           budget: form.budget,
@@ -258,10 +258,11 @@ export function InquiryForm() {
                 className={selectCls(!!errors.eventType)}
               >
                 <option value="">Vyberte…</option>
-                <option value="Corporate">Firemní</option>
-                <option value="Wedding">Svatba</option>
-                <option value="Private Party">Soukromý večírek</option>
-                <option value="Other">Jiné</option>
+                <option>Rozlučky se svobodou</option>
+                <option>Svatby a oslavy</option>
+                <option>Soukromé večírky</option>
+                <option>Teambuildingy</option>
+                <option>Jiné</option>
               </select>
             </Field>
 
@@ -288,22 +289,18 @@ export function InquiryForm() {
             </Field>
 
             <Field label="Datum od" required error={errors.eventDateFrom} fieldName="eventDateFrom">
-              <input
-                type="date"
+              <DateInput
                 value={form.eventDateFrom}
-                onChange={(e) => update('eventDateFrom', e.target.value)}
-                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker() } catch {} }}
-                className={inputCls(!!errors.eventDateFrom)}
+                onChange={(v) => update('eventDateFrom', v)}
+                hasError={!!errors.eventDateFrom}
               />
             </Field>
 
             <Field label="Datum do" required error={errors.eventDateTo} fieldName="eventDateTo">
-              <input
-                type="date"
+              <DateInput
                 value={form.eventDateTo}
-                onChange={(e) => update('eventDateTo', e.target.value)}
-                onClick={(e) => { try { (e.target as HTMLInputElement).showPicker() } catch {} }}
-                className={inputCls(!!errors.eventDateTo)}
+                onChange={(v) => update('eventDateTo', v)}
+                hasError={!!errors.eventDateTo}
               />
             </Field>
 
@@ -417,6 +414,27 @@ function Field({ label, required, error, fieldName, className = '', children }: 
           {error}
         </p>
       )}
+    </div>
+  )
+}
+
+function DateInput({ value, onChange, hasError }: { value: string; onChange: (v: string) => void; hasError: boolean }) {
+  const display = value ? value.split('-').reverse().join('.') : ''
+
+  return (
+    <div className="relative">
+      <div className={inputCls(hasError)}>
+        <span className={display ? '' : 'text-[var(--color-text-dim)]'}>
+          {display || 'DD.MM.RRRR'}
+        </span>
+      </div>
+      <input
+        type="date"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        onClick={(e) => { try { (e.target as HTMLInputElement).showPicker() } catch {} }}
+        className="absolute inset-0 w-full cursor-pointer opacity-0"
+      />
     </div>
   )
 }
