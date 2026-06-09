@@ -48,6 +48,7 @@ export function InquiryForm() {
   const [errors, setErrors] = useState<Partial<Record<keyof FormState, string>>>({})
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
+  const [submitError, setSubmitError] = useState(false)
   const formEl = useRef<HTMLFormElement>(null)
   const sectionRef = useRef<HTMLElement>(null)
 
@@ -120,9 +121,42 @@ export function InquiryForm() {
     if (form.honeypot) return
     if (!validate()) return
     setSubmitting(true)
-    await new Promise((r) => setTimeout(r, 1200))
-    setSubmitting(false)
-    setSubmitted(true)
+    setSubmitError(false)
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          subject: `Poptávka: ${form.eventType} – ${form.name}`,
+          from_name: form.name,
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          company: form.company || '—',
+          city: form.city,
+          event_type: form.eventType,
+          guest_count: form.guestCount,
+          event_date_from: form.eventDateFrom,
+          event_date_to: form.eventDateTo,
+          catering: form.catering,
+          has_venue: form.hasVenue,
+          budget: form.budget,
+          message: form.message || '—',
+          botcheck: form.honeypot,
+        }),
+      })
+      const data = await res.json()
+      if (data.success) {
+        setSubmitted(true)
+      } else {
+        setSubmitError(true)
+      }
+    } catch {
+      setSubmitError(true)
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -332,6 +366,11 @@ export function InquiryForm() {
                   </span>
                 )}
               </button>
+              {submitError && (
+                <p className="mt-3 text-center text-sm text-[var(--color-danger)]" role="alert">
+                  Odeslání se nezdařilo. Zkuste to prosím znovu nebo nás kontaktujte přímo.
+                </p>
+              )}
             </div>
           </form>
         </div>
