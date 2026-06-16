@@ -58,6 +58,7 @@ export function Gallery() {
   }
 
   return (
+    <>
     <section
       id="gallery"
       className="relative bg-[var(--color-bg)] py-24"
@@ -169,19 +170,20 @@ export function Gallery() {
         ← Posouvejte pro více →
       </p>
 
-      {lightboxIndex !== null && (
-        <Lightbox
-          item={items[lightboxIndex]}
-          allItems={items}
-          onClose={() => setLightboxIndex(null)}
-          onNext={() => setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length))}
-          onPrev={() =>
-            setLightboxIndex((i) => (i === null ? null : (i - 1 + items.length) % items.length))
-          }
-          counter={`${lightboxIndex + 1} / ${items.length}`}
-        />
-      )}
     </section>
+    {lightboxIndex !== null && (
+      <Lightbox
+        item={items[lightboxIndex]}
+        allItems={items}
+        onClose={() => setLightboxIndex(null)}
+        onNext={() => setLightboxIndex((i) => (i === null ? null : (i + 1) % items.length))}
+        onPrev={() =>
+          setLightboxIndex((i) => (i === null ? null : (i - 1 + items.length) % items.length))
+        }
+        counter={`${lightboxIndex + 1} / ${items.length}`}
+      />
+    )}
+    </>
   )
 }
 
@@ -215,28 +217,38 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
       gsap.fromTo(
         imgWrapRef.current,
         { opacity: 0, scale: 0.96 },
-        { opacity: 1, scale: 1, duration: 0.35, ease: 'expo.out' },
+        { opacity: 1, scale: 1, duration: 0.35, ease: 'expo.out', clearProps: 'transform,opacity,willChange' },
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <div
-      ref={backdropRef}
-      role="dialog"
-      aria-modal="true"
-      aria-label="Náhled fotografie"
-      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(0,0,0,0.92)] backdrop-blur-md"
-    >
+    <>
+      <div
+        ref={backdropRef}
+        role="dialog"
+        aria-modal="true"
+        aria-label="Náhled fotografie"
+        onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(0,0,0,0.92)] backdrop-blur-md"
+      >
+        <div ref={imgWrapRef} onClick={(e) => e.stopPropagation()} className="relative max-h-[85vh] max-w-[92vw]">
+          <img src={item.src} alt={item.alt} className="block max-h-[85vh] max-w-[92vw] object-contain" />
+          <div className="mt-3 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">
+            <span>{item.category === 'weddings' ? 'Svatba' : 'Akce'}</span>
+            <span>{counter}</span>
+          </div>
+        </div>
+      </div>
+
       <button
         type="button"
         aria-label="Zavřít náhled"
         onClick={onClose}
-        className="absolute right-5 top-5 flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        className="fixed right-5 top-5 z-[120] flex h-11 w-11 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
       >
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="pointer-events-none">
           <path d="M6 6l12 12M6 18L18 6" />
         </svg>
       </button>
@@ -244,10 +256,10 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
       <button
         type="button"
         aria-label="Předchozí fotografie"
-        onClick={(e) => { e.stopPropagation(); onPrev() }}
-        className="absolute left-3 top-1/2 z-[110] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:left-6"
+        onClick={onPrev}
+        className="fixed left-3 top-1/2 z-[120] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:left-6"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="pointer-events-none">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </button>
@@ -255,21 +267,13 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
       <button
         type="button"
         aria-label="Další fotografie"
-        onClick={(e) => { e.stopPropagation(); onNext() }}
-        className="absolute right-3 top-1/2 z-[110] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:right-6"
+        onClick={onNext}
+        className="fixed right-3 top-1/2 z-[120] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:right-6"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="pointer-events-none">
           <path d="M9 6l6 6-6 6" />
         </svg>
       </button>
-
-      <div ref={imgWrapRef} onClick={(e) => e.stopPropagation()} className="relative max-h-[85vh] max-w-[92vw]">
-        <img src={item.src} alt={item.alt} className="block max-h-[85vh] max-w-[92vw] object-contain" />
-        <div className="mt-3 flex items-center justify-between text-xs uppercase tracking-[0.18em] text-[var(--color-text-muted)]">
-          <span>{item.category === 'weddings' ? 'Svatba' : 'Akce'}</span>
-          <span>{counter}</span>
-        </div>
-      </div>
-    </div>
+    </>
   )
 }
