@@ -67,7 +67,7 @@ export function Gallery() {
         <SectionHeading
           eyebrow="Reference"
           title="Vybrané akce"
-          subtitle="Pohled zpět na akce, které jsem realizoval — od intimních svateb po velké firemní galavečery."
+          subtitle="Pohled zpět na akce, které jsem realizoval — od svateb po velké firemní galavečery."
           align="center"
         />
 
@@ -227,7 +227,7 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
       role="dialog"
       aria-modal="true"
       aria-label="Náhled fotografie"
-      onClick={onClose}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose() }}
       className="fixed inset-0 z-[100] flex items-center justify-center bg-[rgba(0,0,0,0.92)] backdrop-blur-md"
     >
       <button
@@ -245,7 +245,7 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
         type="button"
         aria-label="Předchozí fotografie"
         onClick={(e) => { e.stopPropagation(); onPrev() }}
-        className="absolute left-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:left-6"
+        className="absolute left-3 top-1/2 z-[110] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:left-6"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M15 18l-6-6 6-6" />
@@ -256,7 +256,7 @@ function Lightbox({ item, allItems, onClose, onNext, onPrev, counter }: Lightbox
         type="button"
         aria-label="Další fotografie"
         onClick={(e) => { e.stopPropagation(); onNext() }}
-        className="absolute right-3 top-1/2 z-10 flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:right-6"
+        className="absolute right-3 top-1/2 z-[110] flex h-12 w-12 -translate-y-1/2 items-center justify-center rounded-full border border-[var(--color-border)] bg-[rgba(13,13,13,0.6)] text-[var(--color-text)] transition-colors duration-200 hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] sm:right-6"
       >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
           <path d="M9 6l6 6-6 6" />

@@ -423,10 +423,25 @@ function DateInput({ value, onChange, hasError }: { value: string; onChange: (v:
 
   return (
     <div className="relative">
-      <div className={inputCls(hasError)}>
+      <div className={[inputCls(hasError), 'flex items-center justify-between pr-8'].join(' ')}>
         <span className={display ? '' : 'text-[var(--color-text-dim)]'}>
-          {display || 'DD.MM.RRRR'}
+          {display || 'Vyberte…'}
         </span>
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[var(--color-accent)]"
+          width="16"
+          height="16"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <rect x="3" y="5" width="18" height="16" rx="1.5" />
+          <path d="M3 10h18M8 3v4M16 3v4" />
+        </svg>
       </div>
       <input
         type="date"

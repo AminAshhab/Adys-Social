@@ -24,9 +24,20 @@
   html {
     background-color: var(--color-bg);
     color: var(--color-text);
+    color-scheme: dark;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  input, select, textarea {
+    background-color: transparent;
+    color: var(--color-text);
+  }
+
+  option {
+    background-color: var(--color-surface);
+    color: var(--color-text);
   }
 
   body {
