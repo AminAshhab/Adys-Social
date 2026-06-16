@@ -243,7 +243,7 @@ export function InquiryForm() {
               <select
                 value={form.city}
                 onChange={(e) => update('city', e.target.value as City)}
-                className={selectCls(!!errors.city)}
+                className={selectCls(!!errors.city, !form.city)}
               >
                 <option value="">Vyberte…</option>
                 <option>Praha</option>
@@ -255,7 +255,7 @@ export function InquiryForm() {
               <select
                 value={form.eventType}
                 onChange={(e) => update('eventType', e.target.value as EventType)}
-                className={selectCls(!!errors.eventType)}
+                className={selectCls(!!errors.eventType, !form.eventType)}
               >
                 <option value="">Vyberte…</option>
                 <option>Rozlučky se svobodou</option>
@@ -280,7 +280,7 @@ export function InquiryForm() {
               <select
                 value={form.catering}
                 onChange={(e) => update('catering', e.target.value as Catering)}
-                className={selectCls(!!errors.catering)}
+                className={selectCls(!!errors.catering, !form.catering)}
               >
                 <option value="">Vyberte…</option>
                 <option>Ano</option>
@@ -308,7 +308,7 @@ export function InquiryForm() {
               <select
                 value={form.hasVenue}
                 onChange={(e) => update('hasVenue', e.target.value as HasVenue)}
-                className={selectCls(!!errors.hasVenue)}
+                className={selectCls(!!errors.hasVenue, !form.hasVenue)}
               >
                 <option value="">Vyberte…</option>
                 <option>Ano</option>
@@ -320,7 +320,7 @@ export function InquiryForm() {
               <select
                 value={form.budget}
                 onChange={(e) => update('budget', e.target.value as Budget)}
-                className={selectCls(!!errors.budget)}
+                className={selectCls(!!errors.budget, !form.budget)}
               >
                 <option value="">Vyberte…</option>
                 <option>Do 50 000 Kč</option>
@@ -376,18 +376,19 @@ export function InquiryForm() {
   )
 }
 
-function inputCls(hasError: boolean) {
+function inputCls(hasError: boolean, isPlaceholder = false) {
   return [
-    'w-full border-b bg-transparent px-1 py-3 text-base text-[var(--color-text)] outline-none transition-colors duration-200 placeholder:text-[var(--color-text-dim)]',
+    'w-full border-b bg-transparent px-1 py-3 text-base outline-none transition-colors duration-200 placeholder:text-[var(--color-text-dim)]',
+    isPlaceholder ? 'text-[var(--color-text-dim)]' : 'text-[var(--color-text)]',
     hasError
       ? 'border-[var(--color-danger)]'
       : 'border-[var(--color-border)] focus:border-[var(--color-accent)]',
   ].join(' ')
 }
 
-function selectCls(hasError: boolean) {
+function selectCls(hasError: boolean, isEmpty: boolean) {
   return [
-    inputCls(hasError),
+    inputCls(hasError, isEmpty),
     'appearance-none cursor-pointer pr-8 [background-image:linear-gradient(45deg,transparent_50%,var(--color-accent)_50%),linear-gradient(135deg,var(--color-accent)_50%,transparent_50%)] [background-position:calc(100%-12px)_55%,calc(100%-7px)_55%] [background-size:5px_5px] [background-repeat:no-repeat]',
   ].join(' ')
 }
@@ -423,10 +424,8 @@ function DateInput({ value, onChange, hasError }: { value: string; onChange: (v:
 
   return (
     <div className="relative">
-      <div className={[inputCls(hasError), 'flex items-center justify-between pr-8'].join(' ')}>
-        <span className={display ? '' : 'text-[var(--color-text-dim)]'}>
-          {display || 'Vyberte…'}
-        </span>
+      <div className={[inputCls(hasError, !display), 'flex items-center justify-between pr-8'].join(' ')}>
+        <span>{display || 'Vyberte…'}</span>
         <svg
           aria-hidden
           className="pointer-events-none absolute right-1 top-1/2 -translate-y-1/2 text-[var(--color-accent)]"
